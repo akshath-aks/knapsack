@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param x 
+#' @param W 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 greedy_knapsack <- function(x, W){
   
   #checking the input arguments
@@ -31,6 +40,10 @@ greedy_knapsack <- function(x, W){
 }
 
 RNGversion(min(as.character(getRversion()),"3.5.3"))
+##Warning in RNGkind("Mersenne-Twister", "Inversion", "Rounding"): non-uniform 'Rounding'
+##sampler used
+##old sampler used for backward compatibility
+## suppressWarnings() can be used so that the above warning is not displayed
 set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
 n <- 2000
 knapsack_objects <-
