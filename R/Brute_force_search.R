@@ -15,8 +15,8 @@
 
 brute_force_knapsack<-function(x, W,parallel=FALSE){
   #registerDoParallel(4)  # use multicore, set to the number of our cores
-  cores<-parallel::detectCores()
-  cl <- parallel::makeCluster(cores,type='PSOCK') #not to overload your computer
+  #cores<-parallel::detectCores()
+  cl <- parallel::makeCluster(2, setup_strategy = "sequential") #not to overload your computer
   doParallel::registerDoParallel(cl)
   
   if(is.data.frame(x)==FALSE){stop("inputs are incorrect")}
@@ -93,4 +93,4 @@ knapsack_objects <-
 brute_force_knapsack(x = knapsack_objects[1:8,], W = 3500, parallel=FALSE)
 
 
-system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
+#system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
