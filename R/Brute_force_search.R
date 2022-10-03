@@ -12,7 +12,7 @@
 
 
 brute_force_knapsack<-function(x, W,parallel=FALSE){
-  #registerDoParallel(4)  # use multicore, set to the number of our cores
+  # use multicore, set to the number of our cores
   cores<-parallel::detectCores()
   cl <- parallel::makeCluster(cores,type='PSOCK') #not to overload your computer
   doParallel::registerDoParallel(cl)
@@ -41,7 +41,6 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
     else{
       for(i in 1:(2^nrow(x)-1)){   
         out <- brute_force_knapsack_element(i, nrow(x), x$w, x$v)
-        #out_t <- as.data.frame(out)
         value<-c(value, unname(unlist(out[2])))
         weight<-c(weight, unname(unlist(out[1])))
       }
