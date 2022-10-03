@@ -1,19 +1,19 @@
-#' Title
+#' Greedy Heuristic method to solve knapsack problem
 #'
-#' @param x 
-#' @param W 
+#' @param x Data Frama having weights(w) and values(v) columns
+#' @param W Positive number weight of knapsack
 #'
-#' @return
+#' @return The maximum value and elements added to Knapsack
 #' @export
-#'
-#' @examples
+
+
 greedy_knapsack <- function(x, W){
   
   #checking the input arguments
   if(!is.data.frame(x)) stop('First argument must be data frame')
   if(W<=0) stop('second argument must be positive number')
   
-  #creating density column in x data frame
+  #creating d column in x data frame
   x$d <- x$v / x$w
   
   #ordering based on v/w in data frame
@@ -40,10 +40,6 @@ greedy_knapsack <- function(x, W){
 }
 
 RNGversion(min(as.character(getRversion()),"3.5.3"))
-##Warning in RNGkind("Mersenne-Twister", "Inversion", "Rounding"): non-uniform 'Rounding'
-##sampler used
-##old sampler used for backward compatibility
-## suppressWarnings() can be used so that the above warning is not displayed
 set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
 n <- 2000
 knapsack_objects <-
@@ -54,8 +50,8 @@ knapsack_objects <-
 
 
 
-greedy_knapsack(x = knapsack_objects[1:1000000,], W = 3500)
+greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
 
 system.time(
-  abc<-greedy_knapsack(x = knapsack_objects[1:1000000,], W = 3500)
+  abc<-greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
 )

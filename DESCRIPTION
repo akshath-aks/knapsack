@@ -1,13 +1,21 @@
 Package: knapsackpackage
 Type: Package
-Title: What the package does (short line)
+Title: Solving Knapsack Problem Using Dynamic Programming, Greedy Heuristic and
+    Brute Force Methods
 Version: 1.0
 Date: 2022-10-01
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: c(person('Akshath Srinivas','akssr921@student.liu.se',role=c('aut')),
+    person('Yaning Wang','yanwa579@student.liu.se',role=c('aut')))
+Maintainer: Akshath Srinivas, yaning wang <akssr921@student.liu.se>
+Description: This Package contains three functions which takes two arguments x 
+    x which is a data.frame having weight(w) and values(v) as columns and W 
+    which is weight knapsack can hold. This problem is solved by three methods
+    which are Dynamic Programming, Greedy Heuristic and
+    Brute Force.
+License: GPL-3 + file LICENSE
 RoxygenNote: 7.2.1
+Imports: parallel, doParallel, foreach
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Encoding: UTF-8

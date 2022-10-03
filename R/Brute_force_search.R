@@ -1,23 +1,21 @@
-#' Title
+#' Brute Force method to solve knapsack problem
 #'
-#' @param x 
-#' @param W 
+#' @param x Data Frama having weights(w) and values(v) columns
+#' @param W Positive number weight of knapsack
+#' @param parallel Argument to parallelize brute force
 #'
-#' @return
+#' @return The maximum value and elements added to Knapsack
+#' @import foreach
+#' @import parallel
+#' @import doParallel
 #' @export
-#'
-#' @examples
-#' 
-
-library(foreach)
-library(doParallel)
-#registerDoParallel(4)  # use multicore, set to the number of our cores
-cores=detectCores()
-cl <- makeCluster(cores[1]-1) #not to overload your computer
-registerDoParallel(cl) 
 
 
 brute_force_knapsack<-function(x, W,parallel=FALSE){
+  #registerDoParallel(4)  # use multicore, set to the number of our cores
+  cores<-parallel::detectCores()
+  cl <- parallel::makeCluster(cores,type='PSOCK') #not to overload your computer
+  doParallel::registerDoParallel(cl)
   if(is.data.frame(x)==FALSE){stop(print("inputs are incorrect"))}
   if(W<=0) stop('second argument must be positive number')
   if(ncol(x)!=2){stop(print("columns are incorrect"))}
@@ -27,8 +25,9 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
     elements_binary<-c(1:(2^nrow(x)-1))
     if(parallel==TRUE){
     each_element <- c()
-    out <- foreach(i=1:(2^nrow(x)-1), .combine='cbind',
-           .export=c("brute_force_knapsack_element")) %dopar% {
+    
+    out <- foreach::foreach(i=1:(2^nrow(x)-1), .combine='cbind',
+           .export=c("brute_force_knapsack_element"))%dopar% {
              brute_force_knapsack_element(i, nrow(x), x$w, x$v)
            }
     
@@ -60,7 +59,7 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
     elements<-which(position==01)
     result_output<-list(value=value,elements=elements)
     
-    stopCluster(cl)
+    parallel::stopCluster(cl)
     
     return(result_output)
    
