@@ -11,8 +11,10 @@
 #' @export
 
 
+
+
 brute_force_knapsack<-function(x, W,parallel=FALSE){
-  # use multicore, set to the number of our cores
+  #registerDoParallel(4)  # use multicore, set to the number of our cores
   cores<-parallel::detectCores()
   cl <- parallel::makeCluster(cores,type='PSOCK') #not to overload your computer
   doParallel::registerDoParallel(cl)
@@ -48,9 +50,9 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
     }
     result<-data.frame(value,weight,elements_binary)
     result_valid<-result[result$weight<=W,]
-    value<-max(result_valid$value)
+    value<-max( result_valid$value)
     options(digits = 1)
-    position<-c(intToBits(result_valid$elements_binary[which(result_valid$value==max(result_valid$value))]))
+    position<-c(intToBits( result_valid$elements_binary[which( result_valid$value==max( result_valid$value))]))
     elements<-which(position==01)
     result_output<-list(value=value,elements=elements)
     
@@ -88,6 +90,7 @@ knapsack_objects <-
     w=sample(1:4000, size = n, replace = TRUE),
     v=runif(n = n, 0, 10000)
   )
-brute_force_knapsack(x = knapsack_objects[1:8,], W = 3500)
+brute_force_knapsack(x = knapsack_objects[1:8,], W = 3500, parallel=FALSE)
+
 
 system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
