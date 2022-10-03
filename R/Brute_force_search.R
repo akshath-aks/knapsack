@@ -16,55 +16,50 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
   cores<-parallel::detectCores()
   cl <- parallel::makeCluster(cores,type='PSOCK') #not to overload your computer
   doParallel::registerDoParallel(cl)
-  if(is.data.frame(x)==FALSE){stop(print("inputs are incorrect"))}
+  
+  if(is.data.frame(x)==FALSE){stop("inputs are incorrect")}
   if(W<=0) stop('second argument must be positive number')
-  if(ncol(x)!=2){stop(print("columns are incorrect"))}
+  if(ncol(x)!=2){stop("columns are incorrect")}
   else{
     value<-c()
     weight<-c()
     elements_binary<-c(1:(2^nrow(x)-1))
     if(parallel==TRUE){
-    each_element <- c()
-    
-    out <- foreach::foreach(i=1:(2^nrow(x)-1), .combine='cbind',
-           .export=c("brute_force_knapsack_element"))%dopar% {
-             brute_force_knapsack_element(i, nrow(x), x$w, x$v)
-           }
-    
-    out_t <- as.data.frame(out)
-    value<- unname(unlist(out_t[2,]))
-    weight<- unname(unlist(out_t[1,]))
+      each_element <- c()
+      
+      "%dopar%" <- foreach::"%dopar%"
+      out <- foreach::foreach(i=1:(2^nrow(x)-1), .combine='cbind',
+                              .export=c("brute_force_knapsack_element")) %dopar% {
+                                brute_force_knapsack_element(i, nrow(x), x$w, x$v)
+                              }
+      
+      out_t <- as.data.frame(out)
+      value<- unname(unlist(out_t[2,]))
+      weight<- unname(unlist(out_t[1,]))
     }
     
     else{
-    for(i in 1:(2^nrow(x)-1)){   
-    combis_weight<-0
-    combis_value<-0
-    combis<-intToBits(elements_binary[i])
-    for(j in 1:nrow(x))  {
-      if(combis[j]==01){
-        combis_weight<-combis_weight+x$w[j]
-       combis_value<-combis_value+x$v[j]
-     }
+      for(i in 1:(2^nrow(x)-1)){   
+        out <- brute_force_knapsack_element(i, nrow(x), x$w, x$v)
+        #out_t <- as.data.frame(out)
+        value<-c(value, unname(unlist(out[2])))
+        weight<-c(weight, unname(unlist(out[1])))
+      }
+      
     }
-    value<-c(value,combis_value)
-    weight<-c(weight,combis_weight)
-    }
-    
     result<-data.frame(value,weight,elements_binary)
-    result_xxx<-result[result$weight<=W,]
-    value<-max(result_xxx$value)
+    result_valid<-result[result$weight<=W,]
+    value<-max(result_valid$value)
     options(digits = 1)
-    position<-c(intToBits(result_xxx$elements_binary[which(result_xxx$value==max(result_xxx$value))]))
+    position<-c(intToBits(result_valid$elements_binary[which(result_valid$value==max(result_valid$value))]))
     elements<-which(position==01)
     result_output<-list(value=value,elements=elements)
     
     parallel::stopCluster(cl)
     
     return(result_output)
-   
+    
   }
-}
 }
 brute_force_knapsack_element<-function(i, total_row, x_w, x_v){
   combis_weight<-0
@@ -77,13 +72,11 @@ brute_force_knapsack_element<-function(i, total_row, x_w, x_v){
     }
   }
   each_element <- list(combis_weight=combis_weight, combis_value=combis_value)
-
   
   return (each_element)
 }
 
 
-  
 RNGversion(min(as.character(getRversion()),"3.5.3"))
 ##Warning in RNGkind("Mersenne-Twister", "Inversion", "Rounding"): non-uniform 'Rounding'
 ##sampler used
