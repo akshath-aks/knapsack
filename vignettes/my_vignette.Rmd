@@ -1,0 +1,79 @@
+---
+title: "my_vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my_vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(knapsackpackage)
+```
+This Package contains three functions which takes two arguments that is x which is a data.frame having weight(w) and values(v) as columns and W which is weight knapsack can hold. This problem is solved by three methods which are Dynamic Programming, Greedy Heuristic and Brute Force.
+
+**Dynamic Programming**
+
+    ```{r,include=TRUE,eval=TRUE,echo=TRUE}
+    RNGversion(min(as.character(getRversion()),"3.5.3"))
+set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
+n <- 2000
+knapsack_objects <-
+  data.frame(
+    w=sample(1:4000, size = n, replace = TRUE),
+    v=runif(n = n, 0, 10000)
+  )
+    
+    dynamic_knapsack(x = knapsack_objects[1:500,], W = 2000)
+    
+    ```
+    
+Time to run dynamic programming algorithm for n=500 objects.
+
+    ```{r,include=TRUE,eval=TRUE,echo=TRUE}
+    system.time(
+  abc<-dynamic_knapsack(x = knapsack_objects[1:500,], W = 3500)
+  )
+    
+    ```
+    
+**Brute  Force search**
+
+    ```{r,include=TRUE,eval=TRUE,echo=TRUE}
+    
+  brute_force_knapsack(x = knapsack_objects[1:8,], W = 3500)
+    
+    ```
+
+Time to run brute force search algorithm for n=16 objects.
+
+    ```{r,include=TRUE,eval=TRUE,echo=TRUE}
+    
+  system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
+    
+    ```
+    
+**Greedy Heuristic**
+
+    ```{r,include=TRUE,eval=TRUE,echo=TRUE}
+    
+  greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
+    
+    ```
+
+Time to run greedy heuristic algorithm for n=1000000 objects
+
+    ```{r,include=TRUE,eval=TRUE,echo=TRUE}
+    
+  system.time(
+  abc<-greedy_knapsack(x = knapsack_objects[1:1000000,], W = 3500)
+)
+    
+    ```

@@ -39,19 +39,18 @@ greedy_knapsack <- function(x, W){
   return(list(value = round(val), elements = as.numeric(ele)))
 }
 
-RNGversion(min(as.character(getRversion()),"3.5.3"))
+suppressWarnings(RNGversion(min(as.character(getRversion()),"3.5.3")))
 set.seed(42, kind = "Mersenne-Twister", normal.kind = "Inversion")
 n <- 2000
-knapsack_objects <-
-  data.frame(
-    w=sample(1:4000, size = n, replace = TRUE),
-    v=runif(n = n, 0, 10000)
-  )
+knapsack_objects <- data.frame(
+  w=sample(1:4000, size = n, replace = TRUE),
+  v=runif(n = n, 0, 10000)
+)
 
 
 
 greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
 
 system.time(
-  abc<-greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
+  abc<-greedy_knapsack(x = knapsack_objects[1:1000000,], W = 3500)
 )

@@ -91,3 +91,4 @@ knapsack_objects <-
   )
 brute_force_knapsack(x = knapsack_objects[1:8,], W = 3500)
 
+system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
