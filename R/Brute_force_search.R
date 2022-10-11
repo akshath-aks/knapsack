@@ -16,8 +16,8 @@
 brute_force_knapsack<-function(x, W,parallel=FALSE){
   #registerDoParallel(4)  # use multicore, set to the number of our cores
   #cores<-parallel::detectCores()
-  cl <- parallel::makeCluster(2, setup_strategy = "sequential") #not to overload your computer
-  doParallel::registerDoParallel(cl)
+  #cl <- parallel::makeCluster(cores, type='PSOCK') #not to overload your computer
+  #doParallel::registerDoParallel(cl)
   
   if(is.data.frame(x)==FALSE){stop("inputs are incorrect")}
   if(W<=0) stop('second argument must be positive number')
@@ -27,6 +27,9 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
     weight<-c()
     elements_binary<-c(1:(2^nrow(x)-1))
     if(parallel==TRUE){
+      cores<-parallel::detectCores()
+      cl <- parallel::makeCluster(cores, type='PSOCK') #not to overload your computer
+      doParallel::registerDoParallel(cl)
       each_element <- c()
       
       "%dopar%" <- foreach::"%dopar%"
@@ -34,6 +37,8 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
                               .export=c("brute_force_knapsack_element")) %dopar% {
                                 brute_force_knapsack_element(i, nrow(x), x$w, x$v)
                               }
+      parallel::stopCluster(cl)
+      
       
       out_t <- as.data.frame(out)
       value<- unname(unlist(out_t[2,]))
@@ -56,7 +61,7 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
     elements<-which(position==01)
     result_output<-list(value=value,elements=elements)
     
-    parallel::stopCluster(cl)
+    #parallel::stopCluster(cl)
     
     return(result_output)
     
@@ -93,4 +98,6 @@ knapsack_objects <-
 brute_force_knapsack(x = knapsack_objects[1:8,], W = 3500, parallel=FALSE)
 
 
-#system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
+system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
+system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:17,], W = 3500))
+system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:17,], W = 3500,parallel=TRUE))

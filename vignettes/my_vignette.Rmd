@@ -59,7 +59,8 @@ Time to run brute force search algorithm for n=16 objects.
   system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
     
     ```
-    
+Running time can be reduced by implementing parallelism. The larger the number of objects (n) is, the more time is saved by parallelism.
+  
 **Greedy Heuristic**
 
     ```{r,include=TRUE,eval=TRUE,echo=TRUE}
