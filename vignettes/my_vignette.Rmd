@@ -52,13 +52,10 @@ Time to run dynamic programming algorithm for n=500 objects.
     
     ```
 
-Time to run brute force search algorithm for n=16 objects.
+Time to run brute force search algorithm for n=16 & n=17 objects: comparison between serial and parallel processing
 
-    ```{r,include=TRUE,eval=TRUE,echo=TRUE}
-    
-  system.time(abc<-brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
-    
-    ```
+![](https://raw.githubusercontent.com/akshath-aks/knapsack/main/vignettes/image.png){width=70%}
+
 Running time can be reduced by implementing parallelism. The larger the number of objects (n) is, the more time is saved by parallelism.
   
 **Greedy Heuristic**
