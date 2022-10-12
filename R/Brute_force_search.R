@@ -27,8 +27,8 @@ brute_force_knapsack<-function(x, W,parallel=FALSE){
     weight<-c()
     elements_binary<-c(1:(2^nrow(x)-1))
     if(parallel==TRUE){
-      cores<-parallel::detectCores()
-      cl <- parallel::makeCluster(cores, type='PSOCK') #not to overload your computer
+      corenum <- 2
+      cl <- parallel::makeCluster(getOption("cl.cores", corenum))
       doParallel::registerDoParallel(cl)
       each_element <- c()
       
